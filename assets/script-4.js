@@ -1,7 +1,7 @@
 const app = document.querySelector('#app');
-const STORAGE_KEY = 'ghoul-kp-style-v1-2';
-globalThis.GHOUL_TEST_VERSION='1.2';
-globalThis.GHOUL_QUESTION_SET_VERSION='2026-08-17a';
+const STORAGE_KEY = 'ghoul-kp-style-v1-3';
+globalThis.GHOUL_TEST_VERSION='1.3';
+globalThis.GHOUL_QUESTION_SET_VERSION='2026-08-18a';
 const AXIS_ORDER = ['G','H','O','U','L'];
 const CORE_IDS = [1,3,5,6,9,10,14,16,18,19];
 const EXTRA_IDS = [4,13,20];
@@ -11,7 +11,7 @@ let data;
 let state = { screen: 'home', index: 0, answers: [], extended: false, mode: null, questionIds: [], replacementsUsed: 0, participantName: '', resultId: '' };
 let lastResult = null;
 
-const escapeHtml = value => String(value).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const escapeHtml = value => String(value).replace(/[&<>\"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c]));
 
 function save(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
 function load(){ try { const saved=JSON.parse(localStorage.getItem(STORAGE_KEY)); if(saved?.answers){state={...state,...saved};if(!state.questionIds?.length)state.questionIds=state.mode==='full'?[...FULL_IDS]:[...CORE_IDS];} } catch {} }
@@ -28,7 +28,7 @@ function strictnessGuide(){ return `<section class="strictness-guide"><span clas
 
 function renderHome(){
   const resumable=state.answers.some(Boolean)&&state.screen!=='result'&&state.mode;
-  app.innerHTML=`<section class="home-wrap"><div class="hero-copy"><div class="eyebrow">Call of Cthulhu Keeper Profile</div><h1 class="home-title">GHOUL<span>STYLE TEST</span></h1><p class="lead">KPとして迷ったとき、何を一番大切にするか。実際の卓を思い浮かべながら答えてください。</p></div><section class="ghoul-guide" aria-labelledby="ghoul-guide-title"><div class="guide-intro"><span class="eyebrow">What is GHOUL?</span><h2 id="ghoul-guide-title">5つの「判断のよりどころ」</h2><p>得点が高いほど、迷ったときにその基準を先に守りやすいことを表します。能力の高さや、KPとしての善悪を決めるものではありません。</p></div><div class="guide-axes"><div><b>G</b><span><strong>Game</strong>判定・難易度・公平さ</span></div><div><b>H</b><span><strong>Host</strong>PLの納得・安心・参加感</span></div><div><b>O</b><span><strong>Orchestration</strong>物語・演出・テンポ</span></div><div><b>U</b><span><strong>Unscripted</strong>想定外・即興・自由な提案</span></div><div><b>L</b><span><strong>Logic</strong>世界の因果・NPCの心理・自然さ</span></div></div></section>${resumable?`<button class="btn btn-primary resume" data-action="resume">${state.mode==='full'?'詳細':'クイック'}診断の続きを回答する</button>`:''}<div class="mode-grid"><article class="mode-card recommended"><span class="mode-label">おすすめ</span><h2>クイック診断</h2><p class="mode-count">10問 <small>約5分</small></p><p>裁定の違いが出やすい場面を厳選。結果が僅差のときだけ3問を追加します。</p><ul><li>探索・戦闘・NPC・ルール・撤退判断を網羅</li><li>独自裁定には最大3問を補充</li></ul><button class="btn btn-primary" data-action="start" data-mode="quick">クイック診断を始める</button></article><article class="mode-card"><span class="mode-label">じっくり</span><h2>詳細診断</h2><p class="mode-count">20問 <small>約10分</small></p><p>すべての場面に回答し、結果の揺れを小さくします。</p><ul><li>全20設問を使用</li><li>比較や検証にも向く詳細版</li></ul><button class="btn btn-secondary" data-action="start" data-mode="full">詳細診断を始める</button></article></div></section>`;
+  app.innerHTML=`<section class="home-wrap"><div class="hero-copy"><div class="eyebrow">Call of Cthulhu Keeper Profile</div><h1 class="home-title">GHOUL<span>STYLE TEST</span></h1><p class="lead">KPとして迷ったとき、何を一番大切にするか。実際の卓を思い浮かべながら答えてください。</p></div><section class="ghoul-guide" aria-labelledby="ghoul-guide-title"><div class="guide-intro"><span class="eyebrow">What is GHOUL?</span><h2 id="ghoul-guide-title">5つの「判断のよりどころ」</h2><p>得点が高いほど、迷ったときにその基準を先に守りやすいことを表します。能力の高さや、KPとしての善悪を決めるものではありません。</p></div><div class="guide-axes"><div><b>G</b><span><strong>Game</strong>判定・難易度・公平さ</span></div><div><b>H</b><span><strong>Host</strong>卓全体の合意・参加感・納得</span></div><div><b>O</b><span><strong>Orchestration</strong>物語・演出・テンポ</span></div><div><b>U</b><span><strong>Unscripted</strong>予定外から生まれる新しい遊び・展開</span></div><div><b>L</b><span><strong>Logic</strong>世界の因果・NPCの心理・自然さ</span></div></div></section>${resumable?`<button class="btn btn-primary resume" data-action="resume">${state.mode==='full'?'詳細':'クイック'}診断の続きを回答する</button>`:''}<div class="mode-grid"><article class="mode-card recommended"><span class="mode-label">おすすめ</span><h2>クイック診断</h2><p class="mode-count">10問 <small>約5分</small></p><p>裁定の違いが出やすい場面を厳選。結果が僅差のときだけ3問を追加します。</p><ul><li>探索・戦闘・NPC・ルール・撤退判断を網羅</li><li>独自裁定には最大3問を補充</li></ul><button class="btn btn-primary" data-action="start" data-mode="quick">クイック診断を始める</button></article><article class="mode-card"><span class="mode-label">じっくり</span><h2>詳細診断</h2><p class="mode-count">20問 <small>約10分</small></p><p>すべての場面に回答し、結果の揺れを小さくします。</p><ul><li>全20設問を使用</li><li>比較や検証にも向く詳細版</li></ul><button class="btn btn-secondary" data-action="start" data-mode="full">詳細診断を始める</button></article></div></section>`;
   app.querySelector('.mode-grid')?.insertAdjacentHTML('beforebegin',strictnessGuide());
   app.querySelector('.mode-grid')?.insertAdjacentHTML('beforebegin',`<section class="name-entry"><label for="participant-name">診断結果に表示する名前</label><input id="participant-name" maxlength="30" autocomplete="nickname" placeholder="例：山田KP、匿名希望" value="${escapeHtml(state.participantName||'')}"><small>結果画像と運営者向け集計に記録されます。本名でなくても構いません。</small></section>`);
 }
